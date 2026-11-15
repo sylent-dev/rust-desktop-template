@@ -7,9 +7,7 @@ use crate::files::TestDirectory;
 
 impl TestDirectory {
     fn file(&self) -> SettingsFile {
-        SettingsFile {
-            directory: Some(self.0.clone()),
-        }
+        SettingsFile::in_directory(self.0.clone())
     }
 
     fn write(&self, text: &str) {
@@ -24,6 +22,66 @@ fn changed() -> Settings {
     settings.apply(SettingChange::Language(LanguageSetting::French));
     settings.apply(SettingChange::AlwaysOnTop(true));
     settings
+}
+
+/// The settings as a TOML table, one key per setting.
+fn table(settings: &Settings) -> toml::Table {
+    toml::from_str(&toml::to_string(settings).unwrap()).unwrap()
+}
+
+/// A setting added to [`changed`] keeps the tests below on every setting.
+#[test]
+fn the_changed_settings_change_every_setting() {
+    let default = table(&Settings::default());
+    let changed = table(&changed());
+
+    assert_eq!(
+        default.keys().collect::<Vec<_>>(),
+        changed.keys().collect::<Vec<_>>()
+    );
+    for (key, value) in &changed {
+        assert_ne!(Some(value), default.get(key), "{key}");
+    }
+}
+
+/// A setting added without its `deserialize_with` would lose every setting of the user for
+/// one value it can't read.
+#[test]
+fn every_setting_that_cant_be_read_takes_its_default_and_keeps_the_others() {
+    let default = table(&Settings::default());
+    let changed = table(&changed());
+    for key in changed.keys() {
+        let mut odd = changed.clone();
+        let mut unreadable = toml::Table::new();
+        unreadable.insert("unreadable".to_owned(), toml::Value::Boolean(true));
+        odd.insert(key.clone(), toml::Value::Table(unreadable));
+        let directory = TestDirectory::new("every-odd-value");
+        directory.write(&toml::to_string(&odd).unwrap());
+
+        let loaded = table(&directory.file().load());
+
+        for (other, value) in &loaded {
+            let expected = if other == key { &default } else { &changed };
+            assert_eq!(
+                Some(value),
+                expected.get(other),
+                "{other} with {key} unreadable"
+            );
+        }
+    }
+}
+
+/// A language added to the interface gets its choice in the settings, which the compiler
+/// doesn't ask for.
+#[test]
+fn each_language_of_the_interface_can_be_chosen_besides_the_system() {
+    let fixed: Vec<Language> = LanguageSetting::ALL
+        .into_iter()
+        .filter(|setting| *setting != LanguageSetting::System)
+        .map(LanguageSetting::language)
+        .collect();
+
+    assert_eq!(fixed, Language::ALL);
 }
 
 #[test]
@@ -44,12 +102,6 @@ fn a_change_says_whether_it_changed_something() {
     assert!(settings.apply(SettingChange::Language(LanguageSetting::English)));
     assert!(!settings.apply(SettingChange::Language(LanguageSetting::English)));
     assert_eq!(settings.window_level(), WindowLevel::AlwaysOnTop);
-}
-
-#[test]
-fn a_fixed_language_setting_gives_its_language() {
-    assert_eq!(LanguageSetting::English.language(), Language::English);
-    assert_eq!(LanguageSetting::French.language(), Language::French);
 }
 
 #[test]

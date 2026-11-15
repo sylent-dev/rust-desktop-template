@@ -14,11 +14,6 @@ const MESSAGES: PerLanguage<&str> = PerLanguage {
     french: include_str!("../locales/fr.ftl"),
 };
 
-/// The Fluent messages of `language`.
-fn messages(language: Language) -> &'static str {
-    MESSAGES.of(language)
-}
-
 /// Declares [`Message`], its list for the tests and the identifier of each message in the
 /// `.ftl` files, from one table, so that a message without arguments is declared once.
 macro_rules! messages {
@@ -54,7 +49,7 @@ messages! {
 }
 
 /// The identifiers of the messages with arguments, each used by its method of [`Translator`].
-const VERSION: &str = "version";
+const VERSION_ID: &str = "version";
 
 /// The messages of one language.
 pub struct Translator {
@@ -67,7 +62,7 @@ impl Translator {
     /// If the embedded messages of `language` can't be parsed, which the tests rule out.
     #[must_use]
     pub fn new(language: Language) -> Self {
-        let resource = FluentResource::try_new(messages(language).to_owned())
+        let resource = FluentResource::try_new((*MESSAGES.of(language)).to_owned())
             .unwrap_or_else(|(_, errors)| panic!("invalid messages for {language:?}: {errors:?}"));
         let mut bundle = FluentBundle::new(vec![language.identifier()]);
         // Without the Unicode isolation marks around the arguments, which egui would draw as
@@ -90,7 +85,7 @@ impl Translator {
     pub fn version(&self, version: &str) -> String {
         let mut args = FluentArgs::new();
         args.set("version", version);
-        self.format(VERSION, Some(&args))
+        self.format(VERSION_ID, Some(&args))
     }
 
     /// The message `id` with `args`. A missing message or an error in it fails the debug

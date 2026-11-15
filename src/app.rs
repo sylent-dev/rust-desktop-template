@@ -16,11 +16,7 @@ pub struct App {
 
 impl App {
     #[must_use]
-    pub fn new(
-        _creation: &eframe::CreationContext<'_>,
-        settings: Settings,
-        settings_file: SettingsFile,
-    ) -> Self {
+    pub fn new(settings: Settings, settings_file: SettingsFile) -> Self {
         Self {
             translator: Translator::new(settings.language().language()),
             settings,
@@ -108,6 +104,27 @@ fn language_message(setting: LanguageSetting) -> Message {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::files::TestDirectory;
+    use crate::language::Language;
+
+    #[test]
+    fn a_change_is_saved_at_once_and_applied_to_the_window() {
+        let directory = TestDirectory::new("app-apply");
+        let file = || SettingsFile::in_directory(directory.0.clone());
+        let mut app = App::new(Settings::default(), file());
+        let ctx = Context::default();
+
+        app.apply(&ctx, SettingChange::Language(LanguageSetting::French));
+        app.apply(&ctx, SettingChange::AlwaysOnTop(true));
+
+        let saved = file().load();
+        assert_eq!(saved.language(), LanguageSetting::French);
+        assert!(saved.always_on_top());
+        assert_eq!(
+            app.translator.text(Message::LanguageLabel),
+            Translator::new(Language::French).text(Message::LanguageLabel)
+        );
+    }
 
     #[test]
     fn each_choice_of_language_has_a_name_of_its_own() {

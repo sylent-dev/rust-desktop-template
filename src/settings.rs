@@ -159,6 +159,15 @@ impl SettingsFile {
         }
     }
 
+    /// The file in `directory`, for the tests.
+    #[cfg(test)]
+    #[must_use]
+    pub fn in_directory(directory: PathBuf) -> Self {
+        Self {
+            directory: Some(directory),
+        }
+    }
+
     /// The file where eframe keeps the size and the position of the window, next to the
     /// settings.
     #[must_use]

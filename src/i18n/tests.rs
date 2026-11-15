@@ -4,7 +4,7 @@ use std::collections::BTreeSet;
 /// The identifiers of the messages of the file of `language`.
 fn file_ids(language: Language) -> BTreeSet<String> {
     let resource =
-        FluentResource::try_new(messages(language).to_owned()).expect("the messages parse");
+        FluentResource::try_new((*MESSAGES.of(language)).to_owned()).expect("the messages parse");
     resource
         .entries()
         .filter_map(|entry| match entry {
@@ -19,7 +19,7 @@ fn the_code_and_every_file_have_the_same_messages() {
     let code_ids: BTreeSet<String> = Message::ALL
         .iter()
         .map(|message| message.id())
-        .chain([VERSION])
+        .chain([VERSION_ID])
         .map(str::to_owned)
         .collect();
 

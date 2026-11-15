@@ -8,6 +8,7 @@ mod app;
 mod files;
 mod i18n;
 mod language;
+mod logging;
 mod settings;
 
 use std::process::ExitCode;
@@ -28,15 +29,14 @@ const WINDOW_SIZE: [f32; 2] = [480.0, 360.0];
 const MIN_WINDOW_SIZE: [f32; 2] = [320.0, 240.0];
 
 fn main() -> ExitCode {
-    // To the standard error until the application writes a log file of its own.
-    let _ = simplelog::SimpleLogger::init(log::LevelFilter::Info, simplelog::Config::default());
+    logging::init();
     log::info!("{APP_NAME} {VERSION} started");
     let settings_file = settings::SettingsFile::in_config_directory();
     let settings = settings_file.load();
     let result = eframe::run_native(
         APP_NAME,
         native_options(&settings, &settings_file),
-        Box::new(move |creation| Ok(Box::new(app::App::new(creation, settings, settings_file)))),
+        Box::new(move |_creation| Ok(Box::new(app::App::new(settings, settings_file)))),
     );
     match result {
         Ok(()) => ExitCode::SUCCESS,
@@ -92,9 +92,11 @@ fn on_x11(options: eframe::NativeOptions) -> eframe::NativeOptions {
 mod tests {
     use super::*;
 
+    /// A rename of the executable moves the folders of the user (the settings are then lost)
+    /// and the names of the release archives (the links of a download page break): only on
+    /// purpose, with this test.
     #[test]
-    fn the_executable_is_named_without_the_prefix_of_the_repository() {
+    fn renaming_the_executable_moves_the_settings_and_breaks_the_download_links() {
         assert_eq!(APP_ID, "desktop-template");
-        assert_eq!(FOLDER_NAME, APP_ID);
     }
 }
