@@ -20,7 +20,7 @@ Template for Rust desktop applications (egui and eframe), with the project conve
 | `.claude/skills/hand-test-guides/` | Skill: the step-by-step guides of the tests by hand in `docs/tests/`, sized for the tester and checked against the code (a guide template). |
 | `.claude/skills/tidy-io-folders/` | Skill: `inputs/` and `outputs/` tidied at the end of a numbered step, on the owner's word. |
 | `specs.md` | Skeleton of the specifications: what the application does. |
-| `roadmap.md`, `backlog.md` | Skeletons of the roadmap (the size of the project and the steps chosen, one pull request per step, kept short since it is read at every session) and of the backlog (polish, edge cases, features, large works, waiting on others). |
+| `roadmap.md`, `backlog.md` | Skeletons of the roadmap (the size of the project, the model recommended for each step, and the steps chosen, one pull request per step, kept short since it is read at every session, with the steps the previous projects taught: a quality review area by area and the first release, a donation method, two retrospectives, the polish) and of the backlog (polish, edge cases, features, large works, waiting on others). |
 | `src/` | A window drawn with egui: one text translated, the language of the system or the one chosen, and a setting of the window level; `src/i18n.rs` (Fluent), `src/settings.rs` (TOML, saved atomically by `src/files.rs`). |
 | `locales/` | The messages of the interface, one Fluent file per language (`en.ftl`, the reference, and `fr.ftl`). |
 | `docs/technical-choices.md` | The technical choices and their reasons: egui and eframe, X11 on Linux, Fluent, the settings, the releases. |
@@ -48,7 +48,7 @@ Template for Rust desktop applications (egui and eframe), with the project conve
 
 2. In `Cargo.toml`, update `name`, `description`, `repository` and the `[[bin]]` name (the executable, the application id of the window and the folder of the settings), then run `cargo build` to update `Cargo.lock`. In `src/main.rs`, update `APP_NAME` and the test of the executable name.
 3. Adapt this README to the project: keep the Requirements, Build, Development, Release and License sections, replace the others.
-4. Check the license: keep `MIT OR Apache-2.0`, or change `license` in `Cargo.toml` and the `LICENSE-*` files (they are also copied into the release archives by `.github/workflows/release.yml`).
+4. Choose the license with the owner before any code is published (process.md, Start a project): keep `MIT OR Apache-2.0`, or change `license` in `Cargo.toml` and the `LICENSE-*` files (they are also copied into the release archives by `.github/workflows/release.yml`).
 5. On GitHub, protect `main` (**Settings › Rules › Rulesets**): require a pull request and the `Format, lint and test`, `Lint on windows-latest`, `Lint on macos-latest` and `Minimum Rust version` checks; protect the tags `v*` from being moved or deleted (docs/releases.md). On a free account, rulesets only apply to public repositories.
 6. Set the pull request settings, which are not copied from the template: allow only squash merging, and delete the branches once merged (**Settings › General › Pull Requests**), or:
 
