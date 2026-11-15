@@ -16,6 +16,9 @@ Template for Rust desktop applications (egui and eframe), with the project conve
 | `.claude/agents/dependency-reviewer.md` | Subagent that reviews the open Dependabot pull requests and tells, in French, which to merge or set aside, with their links and the comments to post. |
 | `.claude/skills/excalidraw-wireframes/` | Skill: editable Excalidraw wireframes of the interface, and sketches of a structure, iterated with the owner (Python helpers and an SVG preview). |
 | `.claude/skills/html-mockups/` | Skill: the HTML mock-up built from the wireframe, styles and open decisions compared with tabs, then the design tokens (starting page, server without cache, headless screenshots). |
+| `.claude/skills/egui-screenshots/` | Skill: a screenshot of the application's own window, taken by egui through a temporary patch, to check a visual change. |
+| `.claude/skills/hand-test-guides/` | Skill: the step-by-step guides of the tests by hand in `docs/tests/`, sized for the tester and checked against the code (a guide template). |
+| `.claude/skills/tidy-io-folders/` | Skill: `inputs/` and `outputs/` tidied at the end of a numbered step, on the owner's word. |
 | `specs.md` | Skeleton of the specifications: what the application does. |
 | `roadmap.md`, `backlog.md` | Skeletons of the roadmap (the size of the project and the steps chosen, one pull request per step, kept short since it is read at every session) and of the backlog (polish, edge cases, features, large works, waiting on others). |
 | `src/` | A window drawn with egui: one text translated, the language of the system or the one chosen, and a setting of the window level; `src/i18n.rs` (Fluent), `src/settings.rs` (TOML, saved atomically by `src/files.rs`). |
