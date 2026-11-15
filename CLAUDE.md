@@ -21,6 +21,7 @@
 - Exception: the translations of the user interface, if the project has any. Only the translated strings and their comments are in the other language; the code stays in English.
 - If the user interface is translated, its texts are never hard-coded: each message goes into the translation file of every language (English is the reference), read with the library chosen in `docs/technical-choices.md`.
 - Exception: the code review notes in `outputs/` are written in French.
+- Exception: the test guides in `docs/tests/` may be written in French, the language of the testers.
 
 ## Specifications and roadmap
 
@@ -48,18 +49,28 @@ Two folders are the exchange area between the owner and Claude Code. They are ig
 - `inputs/`: what the owner gives for context: screenshots, examples, references, copied texts. Read them when the owner points to them; never commit, move or delete them unless asked.
 - `outputs/`: what Claude Code produces for the owner: reports, code review notes, screenshots to compare styles. Name them `<YYYY-MM-DD>-<subject>.<ext>` when they are meant to be kept for a while. Claude Code's own checks (wireframe previews, test screenshots) stay in its scratchpad, never in `outputs/`, so that the owner doesn't take them for the deliverable.
 - Anything meant to last goes elsewhere and is committed: documentation in `docs/`, images used by the application in `assets/`, test data next to the tests.
+- The guides of the tests by hand (step by step, a blank results table, a free test last) go in `docs/tests/linux/`, `docs/tests/windows/` or `docs/tests/macos/`, named by feature (e.g. `docs/tests/linux/settings-saved.md`) and listed in `docs/tests/README.md`, in the pull request of the step they test: they are run again before a release. They stay blank templates: their results come back in the conversation or the pull request.
 
 ## Process
 
-- Follow `process.md`: the first cycle runs the tools the project needs in order (specifications, structure, then wireframes, mock-up and design system for a terminal interface, build, release, retrospective); after it, each change runs only the tools it needs, picked from the backlog into the roadmap. At the retrospective of a cycle, sort the backlog, and move to `CLAUDE.md` or `process.md` the rules of the memory that hold for the whole project.
+- Follow `process.md`: the first cycle runs the tools the project needs in order (specifications, structure, then wireframes, mock-up and design system for the interface, build, release, retrospective); after it, each change runs only the tools it needs, picked from the backlog into the roadmap. At the retrospective of a cycle, sort the backlog, and move to `CLAUDE.md` or `process.md` the rules of the memory that hold for the whole project.
 - An urgent fix jumps the roadmap (a `fix/` branch from `main`, its test, a pull request at once and a patch release, then one line in `roadmap.md`). An idea that needs trying before deciding is an exploration: a branch `explore/<short-description>` that is never merged as it is, bounded by the question it must answer, and ended by its result written down (a decision in `docs/`, a backlog entry or a roadmap step).
-- Sketch any question of structure (the commands and their options, the screens of a terminal interface) as an editable Excalidraw drawing, with the current state and two leads side by side, before writing it in `specs.md`.
-- For a terminal interface, start with editable Excalidraw wireframes in `docs/wireframes/` (grayscale, one group per block; `excalidraw-wireframes` skill), and build the HTML mock-up only once the owner has approved the layout (`html-mockups` skill).
+- Sketch any question of structure (the windows and their screens, the menus, the settings) as an editable Excalidraw drawing, with the current state and two leads side by side, before writing it in `specs.md`.
+- Draw the interface before coding it: first an editable grayscale wireframe in Excalidraw (`docs/wireframes/`, one group per block; `excalidraw-wireframes` skill), which the owner edits too; then, once the layout is agreed, the interactive HTML mock-up (`docs/mockups/`, `html-mockups` skill).
 - During the specifications, check the documentation, rate limits and terms of use of every external service, and record its limits and the risks the owner accepts, with their date, in a note of `docs/` linked from `roadmap.md` (e.g. `docs/<service>-usage.md`).
 - For the mock-up, compare 3 or 4 styles that explore new directions for this application. `design-journal.md` records the past design experiences: use it as a source of ideas for one style at most, never as default rules. Give each open decision its own control on the mock-up page (tabs for a few distinct variants, lists that apply at once for values that combine, such as a font per role, sliders for values tuned by eye; see the `html-mockups` skill), and remove it once decided. A new section of the mock-up goes at the top of the page, so that the owner finds it at once; past ten sections, a table of contents under the header links to each.
 - Each time the mock-up changes (a new mock-up, a new section, any change to its page or its files), give the owner its link at once, served: `python3 docs/mockups/serve.py <port>` (no cache), on the port of this project written in `docs/technical-choices.md`, kept running in the background; check that the page answers with the change, and give `http://127.0.0.1:<port>/docs/mockups/<name>.html`, with the section and the windows to look at. Never a `file://` path: a sandboxed browser may not open it.
+- Decide in the first wireframes whether the window keeps the title bar of the system (the template's default) or draws its own, and draw its buttons from the start.
+- The VS Code Excalidraw extension doesn't reload a file changed on disk: before rewriting a wireframe the owner has open, ask them to save it and close its tab, and commit their version first.
+- A mock-up is split into small files (the shared styles and scripts, one style sheet and one script per block, one script per section), so that a change reads only what it needs.
+- Once approved, the mock-up (its page and its folder) is the single source of truth of the interface. A design change goes into the mock-up first, then into `specs.md` and into the code when that part is already coded. The wireframe only fixed the first layout and isn't kept up to date.
+- Check a visual change of the application with a few screenshots, of the window concerned only, and delete them once looked at: they are for this check, not for the owner, who looks at the mock-up and the application themselves.
 - A test that needs extra code (a delay, a simulated click) runs on a copy of the mock-up page, never on the file the owner has open. Stop the helper processes by their PID, never with `pkill -f` and a pattern that also matches Claude Code's own command.
 - When a deliverable is handed to the owner to look at (a drawing, the mock-up, a build to try), wait for their approval before writing it into `specs.md` or opening the pull request: « let's go » is not an approval of something they haven't seen yet.
+
+## Lessons
+
+- When the owner corrects how Claude Code works, or a practice proves useful, add one line to `docs/lessons.md` at once (its date, the lesson, where it may go), in the pull request of the step under way: the retrospective of each cycle (process.md, Retrospective) sorts them into the template, this `CLAUDE.md`, the skills or the agents.
 
 ## Git workflow
 
@@ -115,11 +126,11 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 
 - Before committing, run and make sure all of these pass:
   - `cargo fmt --all --check`
-  - `cargo clippy --all-targets --all-features -- -D warnings`
-  - `cargo test --all-features`
-- The same checks run in CI (`.github/workflows/ci.yml`) on every pull request.
+  - `cargo clippy --workspace --all-targets --all-features -- -D warnings`
+  - `cargo test --workspace --all-features`
+- The same checks run in CI (`.github/workflows/ci.yml`) on every pull request, with Clippy on Windows and for macOS too, skipped when it only changes Markdown files and `docs/` (the jobs, required on `main`, then succeed at once).
 - When a bug reaches the owner that a test or a check could have caught, add it in the same pull request as the fix.
-- Every acceptance example of `specs.md` (a command line, its output and its exit code) that a step touches becomes an integration test that runs the executable, in the same pull request; a step is done only when the facts of its **done when** in `process.md` (The tools) hold.
+- Every acceptance example of `specs.md` that a step touches becomes a test in the same pull request: its logic apart from the window, as unit tests; what only the window shows, a step of a guide of the tests by hand (Working folders). A step is done only when the facts of its **done when** in `process.md` (The tools) hold.
 - When Claude Code runs in an editor installed as a Flatpak (no access to the owner's desktop: X11, other applications), a check that must run on the desktop (a probe of the windows, of the keyboard or of the pointer) is built in the scratchpad, copied to `~/.cache/<probe>/`, and run with `flatpak-spawn --host <path of the probe>`, outside the sandbox of Claude Code. Ask the owner to allow only that command in `.claude/settings.local.json` (`"Bash(flatpak-spawn --host <path of the probe>:*)"`, never committed), rather than giving the editor access to X11 for good. Warn the owner before each run, and say what they must do in the meantime.
 - `unsafe` code is forbidden and Clippy pedantic lints are enabled (see `[lints]` in `Cargo.toml`).
 - `rust-version` in `Cargo.toml` is the minimum Rust version: CI also builds with it. Raise it when a dependency or a language feature needs a newer Rust.
@@ -128,4 +139,6 @@ Follow [Conventional Commits 1.0.0](https://www.conventionalcommits.org/en/v1.0.
 ## Releases
 
 - Pushing a version tag (e.g. `v0.1.0`) that matches the version of `Cargo.toml` publishes a GitHub release with the executables for Windows, macOS and Linux (`.github/workflows/release.yml`).
-- The template is made for command-line and terminal applications, which this workflow suits: an archive per system with the executable.
+- Follow `docs/releases.md`: the notes of the version in `docs/release-notes/`, a build by hand of every system before the tag, and what an archive holds.
+- Before every release, run the `security-auditor` subagent (`.claude/agents/security-auditor.md`) on the whole repository at `main`: it writes its findings, in French, to `outputs/<YYYY-MM-DD>-security-audit.md`. Summarize them to the owner, and fix the ones they approve in a pull request before the tag; a critical or high finding blocks the tag.
+- The template is made for desktop applications released as an archive per system with the executable. Installers and automatic updates aren't in it yet: a project that needs them records its choice in `docs/technical-choices.md`.
