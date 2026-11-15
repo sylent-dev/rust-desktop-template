@@ -4,8 +4,9 @@
 
 1. Run the `security-auditor` subagent on `main` and fix the findings the owner approves (a critical or high one blocks the release), and run the guides of `docs/tests/` again, if any.
 2. Update `version` in `Cargo.toml` (then run `cargo build` to update `Cargo.lock`), write the notes of the version in `docs/release-notes/v<version>.md` (for the users: the download, what changed, the known limits), and merge them into `main`.
-3. Run the Release workflow by hand on `main` (Actions, Release, Run workflow) and wait for its builds on every system: a tag can't be moved, so a build that fails at the tag costs a version number.
-4. Tag the merged commit with the same version and push the tag:
+3. Check the addresses the executable is built with: `gh repo view --json nameWithOwner` gives the owner and the name of the repository of today, and a search of the code and the docs (`git grep -n '<owner>/'`) finds a link left on an old name. GitHub redirects a renamed account or repository, but an executable keeps the addresses it was built with, and the redirects stop as soon as someone claims the old name.
+4. Run the Release workflow by hand on `main` (Actions, Release, Run workflow) and wait for its builds on every system: a tag can't be moved, so a build that fails at the tag costs a version number.
+5. Tag the merged commit with the same version and push the tag:
 
    ```sh
    git switch main && git pull
