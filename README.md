@@ -21,6 +21,7 @@ Template for Rust desktop applications (egui and eframe), with the project conve
 | `src/` | A window drawn with egui: one text translated, the language of the system or the one chosen, and a setting of the window level; `src/i18n.rs` (Fluent), `src/settings.rs` (TOML, saved atomically by `src/files.rs`). |
 | `locales/` | The messages of the interface, one Fluent file per language (`en.ftl`, the reference, and `fr.ftl`). |
 | `docs/technical-choices.md` | The technical choices and their reasons: egui and eframe, X11 on Linux, Fluent, the settings, the releases. |
+| `docs/code-quality.md` | The rules of the code (names, functions, types, threads, systems, tests, refactoring), read at the start of each step that changes code and applied by `code-reviewer`. |
 | `docs/releases.md` | How to publish a version, and what its archives hold. |
 | `docs/lessons.md`, `docs/tests/` | The lessons kept for the retrospectives, and the guides of the tests by hand. |
 | `.claude/settings.json` | Project settings of Claude Code: the claude.ai connectors turned off and the unused skills hidden from the model, to save tokens. |
@@ -72,6 +73,7 @@ cargo run
 cargo fmt --all
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
+sh scripts/clippy-windows.sh
 sh scripts/clippy-macos.sh
 ```
 
