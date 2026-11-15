@@ -60,9 +60,9 @@
 Two folders are the exchange area between the owner and Claude Code. They are ignored by Git, except their `.gitkeep`, and hold only temporary files.
 
 - `inputs/`: what the owner gives for context: screenshots, examples, references, copied texts. Read them when the owner points to them; never commit, move or delete them unless asked.
-- `outputs/`: what Claude Code produces for the owner: reports, code review notes, screenshots to compare styles. Name them `<YYYY-MM-DD>-<subject>.<ext>` when they are meant to be kept for a while. Claude Code's own checks (wireframe previews, test screenshots) stay in its scratchpad, never in `outputs/`, so that the owner doesn't take them for the deliverable.
+- `outputs/`: what Claude Code produces for the owner: reports, code review notes, screenshots to compare styles. Name them `<YYYY-MM-DD>-<subject>.<ext>` when they are meant to be kept for a while. Claude Code's own checks (wireframe previews, test screenshots) stay in its scratchpad, never in `outputs/`, so that the owner doesn't take them for the deliverable. At the end of a numbered step (not of a sub-step), propose to tidy both folders (`tidy-io-folders` skill), and run it on the owner's word.
 - Anything meant to last goes elsewhere and is committed: documentation in `docs/`, images used by the application in `assets/`, test data next to the tests.
-- The guides of the tests by hand (step by step, a blank results table, a free test last) go in `docs/tests/linux/`, `docs/tests/windows/` or `docs/tests/macos/`, named by feature (e.g. `docs/tests/linux/settings-saved.md`) and listed in `docs/tests/README.md`, in the pull request of the step they test: they are run again before a release. They stay blank templates: their results come back in the conversation or the pull request.
+- The guides of the tests by hand (step by step, a blank results table, a free test last) go in `docs/tests/linux/`, `docs/tests/windows/` or `docs/tests/macos/`, named by feature (e.g. `docs/tests/linux/settings-saved.md`) and listed in `docs/tests/README.md`, in the pull request of the step they test: they are run again before a release. They stay blank templates: their results come back in the conversation or the pull request. Write them with the `hand-test-guides` skill.
 
 ## Process
 
@@ -79,7 +79,7 @@ Two folders are the exchange area between the owner and Claude Code. They are ig
 - The VS Code Excalidraw extension doesn't reload a file changed on disk: before rewriting a wireframe the owner has open, ask them to save it and close its tab, and commit their version first.
 - A mock-up is split into small files (the shared styles and scripts, one style sheet and one script per block, one script per section), so that a change reads only what it needs.
 - Once approved, the mock-up (its page and its folder) is the single source of truth of the interface. A design change goes into the mock-up first, then into `specs.md` and into the code when that part is already coded. The wireframe only fixed the first layout and isn't kept up to date.
-- Check a visual change of the application with a few screenshots, of the window concerned only, and delete them once looked at: they are for this check, not for the owner, who looks at the mock-up and the application themselves.
+- Check a visual change of the application with a few screenshots, of the window concerned only (`egui-screenshots` skill), and delete them once looked at: they are for this check, not for the owner, who looks at the mock-up and the application themselves.
 - A test that needs extra code (a delay, a simulated click) runs on a copy of the mock-up page, never on the file the owner has open. Stop the helper processes by their PID, never with `pkill -f` and a pattern that also matches Claude Code's own command.
 - When a deliverable is handed to the owner to look at (a drawing, the mock-up, a build to try), wait for their approval before writing it into `specs.md` or opening the pull request: « let's go » is not an approval of something they haven't seen yet.
 
