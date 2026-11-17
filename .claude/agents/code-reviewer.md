@@ -75,6 +75,7 @@ Each one comes from a defect that the tests and an earlier review let through. A
 - **A fake**: what does each fake of the tests leave untested on its far side (headers already read, a feature turned off)? Name the lines no test runs.
 - **A rule that orders or chooses**: do the data of its tests give the same answer to the rule and to its nearest wrong neighbour (the other list, one sort key alone, values already sorted)?
 - **A rule read through a bound or a set of the data**: do its tests reach the size of the real data, and more than two values of the set?
+- **A fixture of an outside format** (the answer of a service, a markup in its texts, a file it writes): is it copied from a real answer, with its source and date, or written in the shape the author expects? A fix of such a reading made without a real answer read is a finding.
 - **A heuristic or a threshold**: what measure decided it (`CLAUDE.md`, Code review)? Without one, ask for the measure rather than for a test.
 - **A second fix on the same case**: is there a rule that makes the case impossible, rather than a third condition? Give its cost.
 - **A surviving mutation**: which result does it change that anything reads? The code it touches may do nothing, and is then removed rather than tested.
