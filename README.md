@@ -14,8 +14,11 @@ Template for Rust desktop applications (egui and eframe), with the project conve
 | `.claude/agents/code-reviewer.md` | Subagent that reviews a branch before its pull request and writes its notes, in French, to `outputs/`. |
 | `.claude/agents/security-auditor.md` | Subagent that audits the security of the whole repository before a release and writes its findings, in French, to `outputs/`. |
 | `.claude/agents/dependency-reviewer.md` | Subagent that reviews the open Dependabot pull requests and tells, in French, which to merge or set aside, with their links and the comments to post. |
-| `.claude/skills/excalidraw-wireframes/` | Skill: editable Excalidraw wireframes of the interface, and sketches of a structure, iterated with the owner (Python helpers and an SVG preview). |
-| `.claude/skills/html-mockups/` | Skill: the HTML mock-up built from the wireframe, styles and open decisions compared with tabs, then the design tokens (starting page, server without cache, headless screenshots). |
+| `.claude/skills/excalidraw-structures/` | Skill: a structure (windows, panels, groups of settings) sketched as cards the owner moves, before the wireframes (the Python helpers and the SVG preview of both Excalidraw skills). |
+| `.claude/skills/excalidraw-wireframes/` | Skill: editable Excalidraw wireframes of the interface, iterated with the owner. |
+| `.claude/skills/html-mockups/` | Skill: the HTML mock-up built from the wireframe, every window and state, 3 or 4 styles compared with tabs (starting page). |
+| `.claude/skills/mockup-screenshots/` | Skill: the mock-up served without cache, and each change checked with a headless screenshot (server and screenshot scripts). |
+| `.claude/skills/mockup-decisions/` | Skill: the chosen style iterated one decision at a time with its control on the page, then the design tokens. |
 | `.claude/skills/egui-screenshots/` | Skill: a screenshot of the application's own window, taken by egui through a temporary patch, to check a visual change. |
 | `.claude/skills/hand-test-guides/` | Skill: the step-by-step guides of the tests by hand in `docs/tests/`, sized for the tester and checked against the code (a guide template). |
 | `.claude/skills/tidy-io-folders/` | Skill: `inputs/` and `outputs/` tidied at the end of a numbered step, on the owner's word. |

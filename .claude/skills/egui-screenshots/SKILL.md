@@ -12,7 +12,7 @@ The tools of the system are not reliable here: the `__screenshot` feature of efr
 ## 1. Patch
 
 1. Copy `src/app.rs` to the scratchpad, to restore it after.
-2. Paste the method of `assets/screenshot-patch.rs` into `impl eframe::App for App`. With `SHOT_TO` set, it waits a moment, takes the screenshot, writes it as a PPM and exits.
+2. Paste the method of `assets/screenshot-patch.rs` into `impl App`, and call it first in the `logic` of `impl eframe::App for App` (`self.shoot(ctx);`; add `fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame)` when the application has none). A method of its own leaves the `logic` of the application as it is, its early return reaching only the patch. With `SHOT_TO` set, it waits a moment, takes the screenshot, writes it as a PPM and exits.
 3. To show a state other than the first one (a view opened, sample data, an error), add its code where the patch says, run once.
 
 ## 2. Shoot

@@ -7,7 +7,7 @@ description: Draw editable Excalidraw wireframes of a user interface (grayscale,
 
 Goal: agree with the owner on the **layout** of the interface, without colors or code, in a file they can edit themselves. A coded mock-up made too early is generic and never exactly what the owner wants; a wireframe they draw on becomes their own.
 
-Only the layout is decided here: the style (colors, fonts) comes after, in the HTML mock-up (`html-mockups` skill). The agreed layout ends up in `specs.md`.
+The structure (which windows, panels and groups of settings) is sorted before, with the `excalidraw-structures` skill. Only the layout is decided here: the style (colors, fonts) comes after, in the HTML mock-up (`html-mockups` skill). The agreed layout ends up in `specs.md`.
 
 ## 1. Before drawing
 
@@ -17,7 +17,7 @@ Only the layout is decided here: the style (colors, fonts) comes after, in the H
 
 ## 2. Generate the file
 
-Write a Python generator in the scratchpad that uses `scripts/excalidraw.py` (read its docstring), and save to `docs/wireframes/<name>.excalidraw`:
+Write a Python generator in the scratchpad that uses `../excalidraw-structures/scripts/excalidraw.py` (read its docstring; the helpers are shared with the `excalidraw-structures` skill), and save to `docs/wireframes/<name>.excalidraw`:
 
 - **Grayscale only** (`INK`, `WEAK`, `FILL`), the hand-drawn font: it reads as a draft, so the discussion stays on the layout.
 - **One frame per screen, window size or state**, named after it ("Narrow · 420 px", "Settings open", "Error · offline").
@@ -28,7 +28,7 @@ Write a Python generator in the scratchpad that uses `scripts/excalidraw.py` (re
 
 ## 3. Check before handing over
 
-Render a preview with `scripts/preview.py` (SVG, then a PNG to look at it) and check overlaps, texts that overflow their block, alignment, and that every block is grouped. The preview checks positions, not the look.
+Render a preview with `../excalidraw-structures/scripts/preview.py` (SVG, then a PNG to look at it) and check overlaps, texts that overflow their block, alignment, and that every block is grouped. The preview checks positions, not the look.
 
 ## 4. Hand it over
 
@@ -48,15 +48,7 @@ The best results came from this loop: **the owner draws, Claude Code rearranges 
 4. One question per iteration: layout first; content and wording later.
 5. Once the main frames are agreed, draw the rest under them: the other kinds of content, the empty, loading and waiting states, the errors, the other language, the panels that open over the content.
 
-## 6. Structures
-
-The same file format serves to sort and organize, not only to lay out screens: the windows of an application and how one leads to the other, its panels, the groups of its settings, the tree of the contents of a site. Moving cards by hand makes an abstract structure concrete; the owner loved it on sylent.art.
-
-- One card per item (one group: its box and its label), the current state on the left, **two leads** side by side, a parking area for the items not placed yet, and the open questions in a corner.
-- Draw it during the specifications, **before the wireframes**: on sylent.art, the tree of the contents came after the build, and the addresses changed twice.
-- Once the owner has moved the cards and chosen a lead, write the structure in `specs.md`.
-
-## 7. Finish
+## 6. Finish
 
 - Write the agreed layout in `specs.md` (window layout section: blocks, order, what each shows, breakpoints).
 - Then build the HTML mock-up from the frames (`html-mockups` skill). From then on, the mock-up is the reference; the wireframe only fixed the first layout, and `specs.md` says so.
