@@ -54,7 +54,7 @@ The price service unreachable      → « Prices unavailable » with the age of 
 
 ## Visual style
 
-<!-- Written at the end of the mock-up (process.md, Design system; html-mockups skill): the tokens of colors, sizes, typography, icons and images, shapes and motion, with the decisions and the options set aside. -->
+<!-- Written at the end of the mock-up (process.md, Design system; mockup-decisions skill): the tokens of colors, sizes, typography, icons and images, shapes and motion, with the decisions and the options set aside. -->
 
 ## Local files
 

@@ -1,10 +1,11 @@
-// A temporary patch (egui-screenshots skill): paste this method into `impl eframe::App for App`
-// in `src/app.rs`, take the screenshot, then restore the file. Never committed.
+// A temporary patch (egui-screenshots skill): paste this method into `impl App` in `src/app.rs`,
+// call it first in `logic` of `impl eframe::App for App` (`self.shoot(ctx);`, adding that method
+// when the application has none), take the screenshot, then restore the file. Never committed.
 //
 // With `SHOT_TO=<file.ppm>` set, the application waits `SHOT_AFTER_MS` milliseconds (1500 by
 // default, time for the fonts and the network), asks egui for a screenshot of its own window,
 // writes it as a PPM (no image crate needed) and exits. Without it, nothing changes.
-fn logic(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+fn shoot(&mut self, ctx: &egui::Context) {
     use std::sync::{Once, OnceLock};
     use std::time::{Duration, Instant};
 
