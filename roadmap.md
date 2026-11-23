@@ -14,6 +14,7 @@ Read only by the steps that need them:
 - [Code quality](docs/code-quality.md): the rules of the code, read at the start of each step that changes code.
 - [Releases](docs/releases.md): how to publish a version, and what its archives hold.
 - [Lessons](docs/lessons.md): what working on the project taught, kept for the retrospectives.
+- Last refactoring pass: none yet; the first one, before the first release, covers the whole repository ([refactoring-pass skill](.claude/skills/refactoring-pass/SKILL.md)), and the end of each pass is written here.
 - `docs/roadmap-archive.md`: the detail of the steps done, moved there once their pull request is merged.
 - [Backlog](backlog.md): what is noted and not chosen yet, read when the next work is chosen.
 

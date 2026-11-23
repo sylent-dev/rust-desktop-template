@@ -21,6 +21,7 @@ Template for Rust desktop applications (egui and eframe), with the project conve
 | `.claude/skills/mockup-decisions/` | Skill: the chosen style iterated one decision at a time with its control on the page, then the design tokens. |
 | `.claude/skills/egui-screenshots/` | Skill: a screenshot of the application's own window, taken by egui through a temporary patch, to check a visual change. |
 | `.claude/skills/hand-test-guides/` | Skill: the step-by-step guides of the tests by hand in `docs/tests/`, sized for the tester and checked against the code (a guide template). |
+| `.claude/skills/refactoring-pass/` | Skill: a refactoring pass on the code changed since the last one, before each minor version, until no high nor medium finding is left. |
 | `.claude/skills/tidy-io-folders/` | Skill: `inputs/` and `outputs/` tidied at the end of a numbered step, on the owner's word. |
 | `specs.md` | Skeleton of the specifications: what the application does. |
 | `roadmap.md`, `backlog.md` | Skeletons of the roadmap (the size of the project, the model recommended for each step, and the steps chosen, one pull request per step, kept short since it is read at every session, with the steps the previous projects taught: a quality review area by area and the first release, a donation method, two retrospectives, the polish) and of the backlog (polish, edge cases, features, large works, waiting on others). |
